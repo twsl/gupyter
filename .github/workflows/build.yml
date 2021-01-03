@@ -1,0 +1,35 @@
+name: Docker
+
+on:  
+  workflow_dispatch:
+  push:
+  #schedule:
+    # * is a special character in YAML so you have to quote this string
+    #- cron:  '0 12 * * *'
+
+env:
+  DOCKER_IMAGE: ghcr.io/${{ github.repository }}
+
+jobs:
+  cuda-tags:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set Matrix
+        id: set-matrix
+        run: echo "::set-output name=matrix::{\"img\":[\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\"]}"
+  
+  job2:
+    needs: cuda-tags
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.job1.outputs.matrix)}}    
+    env:
+      IMAGE: ${{ matrix.img }}
+    steps:
+    - run: echo $IMAGE
+
