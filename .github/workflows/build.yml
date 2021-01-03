@@ -11,25 +11,18 @@ env:
   DOCKER_IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
-  cuda-tags:
+  job1:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      
-      - name: Set Matrix
-        id: set-matrix
-        # https://github.blog/changelog/2020-04-15-github-actions-new-workflow-features/
-        run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia\":\"Debug\"},{\"img\":\"bar\"}]}"
-
-  
-  base-image:
-    needs: cuda-tags
+    - id: set-matrix
+      run: echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{fromJson(needs.job1.outputs.matrix)}}    
+      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
     env:
       IMAGE: ${{ matrix.img }}
     steps:
