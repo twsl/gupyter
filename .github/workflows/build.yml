@@ -21,9 +21,11 @@ jobs:
       
       - name: Set Matrix
         id: set-matrix
-        run: echo "::set-output name=matrix::{\"img\":[\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\"]}"
+        # https://github.blog/changelog/2020-04-15-github-actions-new-workflow-features/
+        run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia/cuda:11.1-cudnn8-runtime-ubuntu20.04\":\"Debug\"},{\"img\":\"bar\"}]}"
+
   
-  job2:
+  base-image:
     needs: cuda-tags
     runs-on: ubuntu-latest
     strategy:
@@ -32,4 +34,3 @@ jobs:
       IMAGE: ${{ matrix.img }}
     steps:
     - run: echo $IMAGE
-
