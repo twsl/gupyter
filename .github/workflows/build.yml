@@ -11,7 +11,7 @@ env:
   DOCKER_IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
-  cuda-tags:
+  cuda_tags:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -19,7 +19,7 @@ jobs:
     - id: set-matrix
       run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\",\"config\":\"Debug\"},{\"img\":\"bar\",\"config\":\"Release\"}]}"
   build:
-    needs: cuda-tags
+    needs: cuda_tags
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.job1.outputs.matrix)}}
