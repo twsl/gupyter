@@ -17,7 +17,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - id: set-matrix
-      run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\",\"config\":\"Debug\"},{\"img\":\"bar\",\"config\":\"Release\"}]}"
+      #run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\",\"config\":\"Debug\"},{\"img\":\"bar\",\"config\":\"Release\"}]}"
+      run: echo "::set-output name=matrix::{\"img\":\"nvidia\/cuda:11.1-cudnn8-runtime-ubuntu20.04\"}"
   build:
     needs: cuda-tags
     runs-on: ubuntu-latest
