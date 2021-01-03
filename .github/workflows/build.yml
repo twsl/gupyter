@@ -22,7 +22,7 @@ jobs:
       - name: Set Matrix
         id: set-matrix
         # https://github.blog/changelog/2020-04-15-github-actions-new-workflow-features/
-        run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia/cuda:11.1-cudnn8-runtime-ubuntu20.04\":\"Debug\"},{\"img\":\"bar\"}]}"
+        run: echo "::set-output name=matrix::{\"include\":[{\"img\":\"nvidia\":\"Debug\"},{\"img\":\"bar\"}]}"
 
   
   base-image:
