@@ -1,7 +1,5 @@
 {
   "tags": [
-    "11.1-cudnn8-runtime-ubuntu20.04",
-    "11.1-cudnn8-runtime-ubuntu18.04",
-    "10.2-cudnn8-runtime-ubuntu18.04",
+    "11.1-cudnn8-runtime-ubuntu20.04"
   ]
 }
