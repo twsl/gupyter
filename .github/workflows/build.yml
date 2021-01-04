@@ -58,7 +58,7 @@ jobs:
       
         # base-notebook
       - name: Docker meta
-        id: docker_meta
+        id: docker_meta_base
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ env.DOCKER_IMAGE_BASE }}/base-notebook
@@ -72,14 +72,14 @@ jobs:
           context: .
           file: ./base-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.docker_meta_base.outputs.tags }}
+          labels: ${{ steps.docker_meta_base.outputs.labels }}
           build-args: |
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
       
         # minimal-notebook
       - name: Docker meta
-        id: docker_meta
+        id: docker_meta_minimal
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook
@@ -93,14 +93,14 @@ jobs:
           context: .
           file: ./minimal-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.docker_meta_minimal.outputs.tags }}
+          labels: ${{ steps.docker_meta_minimal.outputs.labels }}
           build-args: |
             BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/base-notebook
       
         # scipy-notebook
       - name: Docker meta
-        id: docker_meta
+        id: docker_meta_scipy
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ env.DOCKER_IMAGE_BASE }}/scipy-notebook
@@ -108,14 +108,15 @@ jobs:
           tag-custom-only: true
 
       - name: Build and push
+        id: docker_build
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./scipy-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.docker_meta_scipy.outputs.tags }}
+          labels: ${{ steps.docker_meta_scipy.outputs.labels }}
           build-args: |
             BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook
 
@@ -126,7 +127,7 @@ jobs:
       - name: Check manifest
         if: github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_BASE }}/scipy-notebook:${{ steps.docker_meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_BASE }}/scipy-notebook:${{ steps.docker_meta_scipy.outputs.version }}
       
       - name: Dump context
         if: always()
