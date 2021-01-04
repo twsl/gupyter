@@ -10,3 +10,5 @@ Takes the official jupyter dockerfiles from the [docker-stacks](https://github.c
 - [base-notebook](https://github.com/users/twsl/packages/container/package/gupyter/base-notebook)
 - [minimal-notebook](https://github.com/users/twsl/packages/container/package/gupyter/minimal-notebook)
 - [scipy-notebook](https://github.com/users/twsl/packages/container/package/gupyter/scipy-notebook)
+
+GPU support is added via [nvidia/cuda](https://hub.docker.com/r/nvidia/cuda) images, defined by tags within the `strategy.json` file.
