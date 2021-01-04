@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       
         # base-notebook
-      - name: Docker meta
+      - name: Docker meta base-notebook
         id: docker_meta_base
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -65,7 +65,7 @@ jobs:
           tag-custom: ${{ env.DOCKER_TAG }}
           tag-custom-only: true
 
-      - name: Build and push
+      - name: Build and push base-notebook
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
@@ -78,7 +78,7 @@ jobs:
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
       
         # minimal-notebook
-      - name: Docker meta
+      - name: Docker meta minimal-notebook
         id: docker_meta_minimal
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -86,7 +86,7 @@ jobs:
           tag-custom: ${{ env.DOCKER_TAG }}
           tag-custom-only: true
 
-      - name: Build and push
+      - name: Build and push minimal-notebook
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
         with:
@@ -99,7 +99,7 @@ jobs:
             BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/base-notebook:${{ env.DOCKER_TAG }}
       
         # scipy-notebook
-      - name: Docker meta
+      - name: Docker meta scipy-notebook
         id: docker_meta_scipy
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -107,7 +107,7 @@ jobs:
           tag-custom: ${{ env.DOCKER_TAG }}
           tag-custom-only: true
 
-      - name: Build and push
+      - name: Build and push scipy-notebook
         id: docker_build
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v2
