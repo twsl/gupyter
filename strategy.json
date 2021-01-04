@@ -1,11 +1,8 @@
 {
   "cuda": [
-    "10.2-cudnn7",
-    "10.2-cudnn8",
     "11.1-cudnn8"
   ],
   "os": [
-    "ubuntu18.04",
     "ubuntu20.04"
   ]
 }
