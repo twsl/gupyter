@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.cuda-tags.outputs.matrix)}}
     env:
-      DOCKER_TAG: ${{ matrix.cuda }}-runtime-${{ matrix.os }}
+      DOCKER_TAG: ${{ matrix.tags }}
     steps:
       - name: Tag
         run: echo $DOCKER_TAG
@@ -96,7 +96,7 @@ jobs:
           tags: ${{ steps.docker_meta_minimal.outputs.tags }}
           labels: ${{ steps.docker_meta_minimal.outputs.labels }}
           build-args: |
-            BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/base-notebook
+            BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/base-notebook:${{ env.DOCKER_TAG }}
       
         # scipy-notebook
       - name: Docker meta
@@ -118,7 +118,7 @@ jobs:
           tags: ${{ steps.docker_meta_scipy.outputs.tags }}
           labels: ${{ steps.docker_meta_scipy.outputs.labels }}
           build-args: |
-            BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook
+            BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook:${{ env.DOCKER_TAG }}
 
 
       - name: Image digest
