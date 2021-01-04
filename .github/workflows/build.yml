@@ -40,7 +40,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          repository: 'https://github.com/jupyter/docker-stacks'
+          repository: 'jupyter/docker-stacks'
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
