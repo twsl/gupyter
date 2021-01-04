@@ -1,6 +1,6 @@
 # gupyter
 
-![Build](https://github.com/twsl/gupyter/workflows/build/badge.svg)
+![Build](https://github.com/twsl/gupyter/workflows/Docker/badge.svg)
 
 Docker images for jupyter with GPU support
 
