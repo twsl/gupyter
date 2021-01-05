@@ -41,7 +41,22 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'jupyter/docker-stacks'
-
+      
+      - uses: marceloprado/has-changed-path@v1
+        id: changed-base
+        with:
+          paths: base-notebook
+      
+      - uses: marceloprado/has-changed-path@v1
+        id: changed-minimal
+        with:
+          paths: base-notebook minimal-notebook
+      
+      - uses: marceloprado/has-changed-path@v1
+        id: changed-scipy
+        with:
+          paths: base-notebook minimal-notebook scipy-notebook
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -57,7 +72,8 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       
         # base-notebook
-      - name: Docker meta base-notebook
+      - name: Docker meta base-notebook        
+        if: steps.changed-base.outputs.changed == 'true'
         id: docker_meta_base
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -66,7 +82,7 @@ jobs:
           tag-custom-only: true
 
       - name: Build and push base-notebook
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
           context: ./base-notebook/
@@ -79,6 +95,7 @@ jobs:
       
         # minimal-notebook
       - name: Docker meta minimal-notebook
+        if: steps.changed-minimal.outputs.changed == 'true'
         id: docker_meta_minimal
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -87,7 +104,7 @@ jobs:
           tag-custom-only: true
 
       - name: Build and push minimal-notebook
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.changed-minimal.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
           context: ./minimal-notebook/
@@ -100,6 +117,7 @@ jobs:
       
         # scipy-notebook
       - name: Docker meta scipy-notebook
+        if: steps.changed-scipy.outputs.changed == 'true'
         id: docker_meta_scipy
         uses: crazy-max/ghaction-docker-meta@v1
         with:
@@ -109,7 +127,7 @@ jobs:
 
       - name: Build and push scipy-notebook
         id: docker_build
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.changed-scipy.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
           context: ./scipy-notebook/
@@ -122,10 +140,11 @@ jobs:
 
 
       - name: Image digest
+        if: steps.changed-scipy.outputs.changed == 'true'
         run: echo ${{ steps.docker_build.outputs.digest }}
 
       - name: Check manifest
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.changed-scipy.outputs.changed == 'true'
         run: |
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_BASE }}/scipy-notebook:${{ steps.docker_meta_scipy.outputs.version }}
       
