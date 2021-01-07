@@ -49,17 +49,23 @@ jobs:
       - uses: marceloprado/has-changed-path@v1
         id: changed-base
         with:
-          paths: main/base-notebook
+          paths: base-notebook
+        env:
+          SOURCE: main
       
       - uses: marceloprado/has-changed-path@v1
         id: changed-minimal
         with:
-          paths: main/base-notebook minimal-notebook
+          paths: base-notebook minimal-notebook
+        env:
+          SOURCE: main
       
       - uses: marceloprado/has-changed-path@v1
         id: changed-scipy
         with:
-          paths: main/base-notebook minimal-notebook scipy-notebook
+          paths: base-notebook minimal-notebook scipy-notebook
+        env:
+          SOURCE: main
       
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
