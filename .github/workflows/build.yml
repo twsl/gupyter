@@ -95,6 +95,7 @@ jobs:
           context: ./own/
           file: ./own/Dockerfile
           push: false
+          pull: true # for local image
           load: true
           platforms: linux/amd64
           tags: |
