@@ -37,6 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          path: main
           repository: 'jupyter/docker-stacks'
           fetch-depth: 100
       
@@ -85,7 +86,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          context: own
+          context: ./own/
+          file: ./own/Dockerfile
           push: false
           load: true
           platforms: linux/amd64
@@ -114,8 +116,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          context: ./base-notebook/
-          file: ./base-notebook/Dockerfile
+          context: ./main/base-notebook/
+          file: ./main/base-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_base.outputs.tags }}
           labels: ${{ steps.docker_meta_base.outputs.labels }}
@@ -136,8 +138,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-minimal.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          context: ./minimal-notebook/
-          file: ./minimal-notebook/Dockerfile
+          context: ./main/minimal-notebook/
+          file: ./main/minimal-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_minimal.outputs.tags }}
           labels: ${{ steps.docker_meta_minimal.outputs.labels }}
@@ -159,8 +161,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-scipy.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          context: ./scipy-notebook/
-          file: ./scipy-notebook/Dockerfile
+          context: ./main/scipy-notebook/
+          file: ./main/scipy-notebook/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_scipy.outputs.tags }}
           labels: ${{ steps.docker_meta_scipy.outputs.labels }}
