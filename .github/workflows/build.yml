@@ -8,7 +8,7 @@ on:
 
 env:
   DOCKER_IMAGE_BASE: ghcr.io/${{ github.repository }}
-  DOCKER_TF_TMP: twsl/cuda-tf:latest
+  DOCKER_TF_TMP: twsl/nvidia-cuda-tf
 
 jobs:
   cuda-tags:
@@ -87,6 +87,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
+
+        # cuda tensorflow
+      - name: Docker meta cuda tensorflow       
+        if: steps.changed-base.outputs.changed == 'true'
+        id: docker_meta_tf
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ${{ env.DOCKER_TF_TMP }}
+          tag-custom: latest
+          tag-custom-only: true
       
       - name: Build tensorflow support
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
@@ -97,15 +107,13 @@ jobs:
           push: false
           pull: true # for local image
           load: true
-          platforms: linux/amd64
-          tags: |
-            ${{ env.DOCKER_TF_TMP }}
+          tags: ${{ steps.docker_meta_tf.outputs.tags }}
+          labels: ${{ steps.docker_meta_tf.outputs.labels }}
           build-args: |
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
-          #cache-from: type=local,src=/tmp/.buildx-cache
-          #cache-to: type=local,dest=/tmp/.buildx-cache
       
       - name: Inspect
+        if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         run: |
           docker image inspect ${{ env.DOCKER_TF_TMP }}
 
