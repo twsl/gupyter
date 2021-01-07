@@ -8,7 +8,7 @@ on:
 
 env:
   DOCKER_IMAGE_BASE: ghcr.io/${{ github.repository }}
-  DOCKER_TF_TMP: twsl/nvidia-cuda-tf
+  DOCKER_TF_TMP: nvidiacudatf
 
 jobs:
   cuda-tags:
