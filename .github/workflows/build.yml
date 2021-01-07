@@ -104,8 +104,6 @@ jobs:
         with:
           context: ./own/
           file: ./own/Dockerfile
-          push: false
-          pull: true # for local image
           load: true
           tags: ${{ steps.docker_meta_tf.outputs.tags }}
           labels: ${{ steps.docker_meta_tf.outputs.labels }}
@@ -133,6 +131,7 @@ jobs:
         with:
           context: ./main/base-notebook/
           file: ./main/base-notebook/Dockerfile
+          pull: false
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_base.outputs.tags }}
           labels: ${{ steps.docker_meta_base.outputs.labels }}
