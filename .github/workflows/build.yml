@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+      tf-docker: ${{ steps.set-tf-docker.outputs.tf-docker }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -75,7 +76,8 @@ jobs:
       - name: Tensorflow support
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         run: |
-          ( echo ${{ needs.cuda-tags.outputs.tf-docker }} ) > ./tmp.dockerfile
+          ( echo "${{ needs.cuda-tags.outputs.tf-docker }}" ) > ./tmp.dockerfile \
+          && cat ./tmp.dockerfile
       
       - name: Build and push tensorflow support
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
