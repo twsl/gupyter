@@ -118,7 +118,7 @@ jobs:
           docker image inspect ${{ env.DOCKER_TF_TMP }}
 
         # base-notebook
-      - name: Docker meta base-notebook        
+      - name: Docker meta base-notebook
         if: steps.changed-base.outputs.changed == 'true'
         id: docker_meta_base
         uses: crazy-max/ghaction-docker-meta@v1
@@ -127,7 +127,7 @@ jobs:
           tag-custom: ${{ env.DOCKER_TAG }}
           tag-custom-only: true
 
-      - name: Build and push base-notebook
+      - name: Build base-notebook
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
@@ -140,7 +140,8 @@ jobs:
             ROOT_CONTAINER=${{ env.DOCKER_TF_TMP }}
       
       # https://github.com/docker/build-push-action/issues/100
-      - run: docker push ${{ env.DOCKER_TF_TMP }}:latest
+      - name: Push base-notebook
+        run: docker push ${{ env.DOCKER_IMAGE_BASE }}/base-notebook:${{ env.DOCKER_TAG }}
       
         # minimal-notebook
       - name: Docker meta minimal-notebook
