@@ -15,14 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-      tf-docker: ${{ steps.set-tf-docker.outputs.tf-docker }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set Docker tensorflow update
-        id: set-tf-docker
-        run: strg=`cat Dockerfile` && echo '::set-output name=tf-docker::'${strg}
 
       - name: Set Matrix
         id: set-matrix
@@ -44,6 +39,11 @@ jobs:
         with:
           repository: 'jupyter/docker-stacks'
           fetch-depth: 100
+      
+      - name: Checkout Own
+        uses: actions/checkout@v2
+        with:
+          path: own
       
       - uses: marceloprado/has-changed-path@v1
         id: changed-base
@@ -72,19 +72,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
-
-      - name: Tensorflow support
-        if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
-        run: |
-          ( echo "${{ needs.cuda-tags.outputs.tf-docker }}" ) > ./tmp.dockerfile \
-          && cat ./tmp.dockerfile
       
-      - name: Build and push tensorflow support
+      - name: Build tensorflow support
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./tmp.dockerfile
+          file: ./own/Dockerfile
           push: false
           tags: |
             ${{ env.DOCKER_TF_TMP }}
