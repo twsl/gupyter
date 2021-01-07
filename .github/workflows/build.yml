@@ -88,13 +88,13 @@ jobs:
           context: ./own/
           push: false
           load: true
-          plattforms: linux/amd64
+          platforms: linux/amd64
           tags: |
             ${{ env.DOCKER_TF_TMP }}
           build-args: |
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          #cache-from: type=local,src=/tmp/.buildx-cache
+          #cache-to: type=local,dest=/tmp/.buildx-cache
       
       - name: Inspect
         run: |
