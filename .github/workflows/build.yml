@@ -72,6 +72,10 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+      
+      - name: Set up Docker Buildx with Docker driver
+        id: buildx
+        uses: docker/setup-buildx-action@v1
         with:
           driver: docker
       
@@ -131,6 +135,7 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
+          builder: ${{ steps.buildx.outputs.name }}
           context: ./main/base-notebook/
           file: ./main/base-notebook/Dockerfile
           push: false # fix this later, see issue
