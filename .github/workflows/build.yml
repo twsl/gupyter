@@ -85,7 +85,7 @@ jobs:
           file: ./tmp.dockerfile
           push: false
           tags: |
-            ${{ DOCKER_TF_TMP }}
+            ${{ env.DOCKER_TF_TMP }}
           build-args: |
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
 
@@ -109,7 +109,7 @@ jobs:
           tags: ${{ steps.docker_meta_base.outputs.tags }}
           labels: ${{ steps.docker_meta_base.outputs.labels }}
           build-args: |
-            ROOT_CONTAINER=${{ DOCKER_TF_TMP }}
+            ROOT_CONTAINER=${{ env.DOCKER_TF_TMP }}
       
         # minimal-notebook
       - name: Docker meta minimal-notebook
