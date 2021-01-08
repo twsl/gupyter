@@ -9,6 +9,7 @@ FROM $ROOT_CONTAINER as base
 SHELL ["/bin/bash", "-c"]
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+  nvidia-cuda-toolkit \
   libfreetype6-dev \
   libhdf5-serial-dev \
   libzmq3-dev \
@@ -16,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ##software-properties-common
 
 # For CUDA profiling, TensorFlow requires CUPTI.
-ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:/usr/lib/cuda/include:$LD_LIBRARY_PATH
 
 # Link the libcuda stub to the location where tensorflow is searching for it and reconfigure
 # dynamic linker run-time bindings
