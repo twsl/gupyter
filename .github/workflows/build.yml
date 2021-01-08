@@ -137,10 +137,11 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          builder: ${{ steps.buildx.outputs.name }}
+          builder: ${{ steps.buildx-d.outputs.name }}
           context: ./main/base-notebook/
           file: ./main/base-notebook/Dockerfile
           push: false # fix this later, see issue
+          load: true
           tags: ${{ steps.docker_meta_base.outputs.tags }}
           labels: ${{ steps.docker_meta_base.outputs.labels }}
           build-args: |
