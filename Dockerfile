@@ -1,4 +1,4 @@
-ARG ROOT_CONTAINER=nvidia/cuda:11.1-cudnn8-devel-ubuntu20.04
+ARG ROOT_CONTAINER=nvidia/cuda:10.2-cudnn8-devel-ubuntu18.04
 
 # Shamelessly copied and modified from
 # https://github.com/tensorflow/tensorflow/blob/master/tensorflow/tools/dockerfiles/dockerfiles/gpu.Dockerfile
@@ -9,7 +9,6 @@ FROM $ROOT_CONTAINER as base
 SHELL ["/bin/bash", "-c"]
 # Pick up some TF dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  nvidia-cuda-toolkit \
   libfreetype6-dev \
   libhdf5-serial-dev \
   libzmq3-dev \
