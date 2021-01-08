@@ -149,11 +149,16 @@ jobs:
         with:
           context: ./main/minimal-notebook/
           file: ./main/minimal-notebook/Dockerfile
-          push: true
+          push: false # fix later
           tags: ${{ steps.docker_meta_minimal.outputs.tags }}
           labels: ${{ steps.docker_meta_minimal.outputs.labels }}
           build-args: |
             BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/base-notebook:${{ env.DOCKER_TAG }}
+      
+      # https://github.com/docker/build-push-action/issues/100
+      # therefore push manually
+      - name: Push base-notebook
+        run: docker push ${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook:${{ env.DOCKER_TAG }}
       
         # scipy-notebook
       - name: Docker meta scipy-notebook
@@ -172,11 +177,16 @@ jobs:
         with:
           context: ./main/scipy-notebook/
           file: ./main/scipy-notebook/Dockerfile
-          push: true
+          push: false # fix later
           tags: ${{ steps.docker_meta_scipy.outputs.tags }}
           labels: ${{ steps.docker_meta_scipy.outputs.labels }}
           build-args: |
             BASE_CONTAINER=${{ env.DOCKER_IMAGE_BASE }}/minimal-notebook:${{ env.DOCKER_TAG }}
+      
+      # https://github.com/docker/build-push-action/issues/100
+      # therefore push manually
+      - name: Push base-notebook
+        run: docker push ${{ env.DOCKER_IMAGE_BASE }}/scipy-notebook:${{ env.DOCKER_TAG }}
 
 
       - name: Image digest
