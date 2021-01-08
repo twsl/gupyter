@@ -94,7 +94,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
         # cuda tensorflow
-      - name: Docker meta cuda tensorflow       
+      - name: Docker meta cuda tensorflow
         if: steps.changed-base.outputs.changed == 'true'
         id: docker_meta_tf
         uses: crazy-max/ghaction-docker-meta@v1
@@ -104,12 +104,13 @@ jobs:
           tag-custom-only: true
       
       - name: Build tensorflow support
-        if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
         uses: docker/build-push-action@v2
+        if: steps.changed-base.outputs.changed == 'true'
         with:
           builder: ${{ steps.buildx-default.outputs.name }}
           context: ./own/
           file: ./own/Dockerfile
+          push: false # don't push, only kepp locally
           load: true
           tags: ${{ steps.docker_meta_tf.outputs.tags }}
           labels: ${{ steps.docker_meta_tf.outputs.labels }}
@@ -117,7 +118,7 @@ jobs:
             ROOT_CONTAINER=nvidia/cuda:${{ env.DOCKER_TAG }}
       
       - name: Inspect
-        if: github.event_name == 'workflow_dispatch' || steps.changed-base.outputs.changed == 'true'
+        if: steps.changed-base.outputs.changed == 'true'
         run: |
           docker image inspect ${{ env.DOCKER_TF_TMP }}
 
@@ -138,7 +139,7 @@ jobs:
           builder: ${{ steps.buildx-docker.outputs.name }} # docker required for local image
           context: ./main/base-notebook/
           file: ./main/base-notebook/Dockerfile
-          push: false # fix this later, see issue
+          push: false # default, but fix this later, see issue
           load: true
           tags: ${{ steps.docker_meta_base.outputs.tags }}
           labels: ${{ steps.docker_meta_base.outputs.labels }}
@@ -146,6 +147,7 @@ jobs:
             ROOT_CONTAINER=${{ env.DOCKER_TF_TMP }}
       
       # https://github.com/docker/build-push-action/issues/100
+      # therefore push manually
       - name: Push base-notebook
         run: docker push ${{ env.DOCKER_IMAGE_BASE }}/base-notebook:${{ env.DOCKER_TAG }}
       
