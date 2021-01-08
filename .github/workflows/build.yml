@@ -27,6 +27,7 @@ jobs:
     needs: cuda-tags
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix: ${{fromJson(needs.cuda-tags.outputs.matrix)}}
     env:
       DOCKER_TAG: ${{ matrix.tags }}
