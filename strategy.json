@@ -2,7 +2,7 @@
   "tags": [
     "11.3.0-cudnn8-devel-ubuntu20.04"
     "11.1-cudnn8-devel-ubuntu20.04",
-    "11.3.0-devel-ubuntu18.04"
+    "11.3.0-cudnn8-devel-ubuntu18.04"
     "11.1-cudnn8-devel-ubuntu18.04",
     "11.0-cudnn8-devel-ubuntu18.04",
     "10.2-cudnn8-devel-ubuntu18.04",
