@@ -1,3 +1,5 @@
+While this repository will continue to publish images, I personally switched to [ml-tooling](https://github.com/ml-tooling) and encourage you to do the same.
+
 # gupyter
 
 ![Build](https://github.com/twsl/gupyter/workflows/Docker/badge.svg)
